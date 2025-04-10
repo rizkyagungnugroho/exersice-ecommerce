@@ -1,21 +1,37 @@
-
-
 generator client {
   provider = "prisma-client-js"
-
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model sample {
-  id Int @id @default(autoincrement())
-  name  String
+  id        Int      @id @default(autoincrement())
+  name      String
   createdAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  updateAt  DateTime @default(now())
 
   @@map("example")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  fullName String
+  email    String @unique
+  password String
+  role Role @default(USER)
+  deletedAt DateTime?
+  createdAt DateTime @default(now())
+  updateAt  DateTime @default(now())
+
+  @@map("users")
+}
+
+
+enum Role{
+  USER 
+  ADMIN
 }
