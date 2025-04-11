@@ -18,20 +18,46 @@ model sample {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  fullName String
-  email    String @unique
-  password String
-  role Role @default(USER)
+  id        Int       @id @default(autoincrement())
+  fullName  String
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
   deletedAt DateTime?
-  createdAt DateTime @default(now())
-  updateAt  DateTime @default(now())
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  Store     Store[]
 
   @@map("users")
 }
 
-
-enum Role{
-  USER 
+enum Role {
+  USER
   ADMIN
+}
+
+model Store {
+  id        Int       @id @default(autoincrement())
+  name      String
+  address   String
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  Product   Product[]
+
+  @@map("stores")
+}
+
+model Product {
+  id        Int       @id @default(autoincrement())
+  name      String
+  price     Int
+  stock     Int
+  storeId   Int
+  store     Store     @relation(fields: [storeId], references: [id])
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+
+  @@map("products")
 }
